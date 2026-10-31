@@ -1,0 +1,15 @@
+# /etc/systemd/system/spotprice.timer
+# Every 15 minutes, and every 5 minutes around the day-ahead publication
+# (about 13:45 Finnish time).
+[Unit]
+Description=Run spotprice collection periodically
+
+[Timer]
+OnCalendar=*:00/15
+OnCalendar=*-*-* 13:40/5 Europe/Helsinki
+OnCalendar=*-*-* 14:00/5 Europe/Helsinki
+RandomizedDelaySec=60
+Persistent=true
+
+[Install]
+WantedBy=timers.target

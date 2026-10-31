@@ -1,0 +1,7 @@
+# Alternative to the systemd timer (crontab of the collecting user).
+# CRON_TZ works with cronie; with Debian's cron, adjust the hours to the server's time zone.
+CRON_TZ=Europe/Helsinki
+RUN="cd /var/lib/spotprice && /opt/spotprice/venv/bin/spotprice-collect -c /etc/spotprice/config.yaml; /opt/spotprice/venv/bin/spotprice-export -c /etc/spotprice/config.yaml"
+*/15 * * * *          sh -c "$RUN"
+40,50 13 * * *        sh -c "$RUN"
+5,10,20,25,35,40,50,55 14 * * *  sh -c "$RUN"

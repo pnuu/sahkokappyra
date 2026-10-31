@@ -1,0 +1,16 @@
+# /etc/systemd/system/spotprice.service
+# Collects prices and forecasts, then exports the JSON for the web server.
+[Unit]
+Description=Collect Finnish spot prices and export JSON
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=spotprice
+WorkingDirectory=/var/lib/spotprice
+# EnvironmentFile can hold ENTSOE_TOKEN=... instead of putting it in the YAML
+EnvironmentFile=-/etc/spotprice/env
+ExecStart=/opt/spotprice/venv/bin/spotprice-collect -c /etc/spotprice/config.yaml
+# export even if a source failed, so the page shows whatever is available
+ExecStopPost=/opt/spotprice/venv/bin/spotprice-export -c /etc/spotprice/config.yaml

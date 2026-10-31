@@ -1,0 +1,9 @@
+{
+  "name": "Pörssisähkö",
+  "short_name": "Pörssisähkö",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f9f9f7",
+  "theme_color": "#1f5f8b",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}

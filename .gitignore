@@ -1,0 +1,7 @@
+__pycache__/
+*.egg-info/
+build/
+*.sqlite
+config.yaml
+web/data/*.json
+.pytest_cache/

@@ -1,0 +1,58 @@
+# Configuration for spotprice-collect and spotprice-export.
+# Copy to config.yaml and adjust. Relative paths are relative to this file.
+
+database: spotprice.sqlite
+timezone: Europe/Helsinki
+
+http:
+  timeout: 30
+  user_agent: "spotprice-collector/0.1 (+https://example.invalid/contact)"
+
+prices:
+  # Day-ahead results are published around 13:45 Finnish time. Before this
+  # local time the collector does not try to fetch tomorrow's prices.
+  publish_after: "13:30"
+  # How far back to fill missing prices on the first run (ENTSO-E only).
+  backfill_days: 14
+
+  entsoe:
+    enabled: true
+    # Get a token from https://transparency.entsoe.eu/ (My Account Settings).
+    # The ENTSOE_TOKEN environment variable overrides this value.
+    token: ""
+    url: https://web-api.tp.entsoe.eu/api
+    area: "10YFI-1--------U"
+
+  # Fallback when ENTSO-E is not configured, fails or is late.
+  # Only covers today and tomorrow.
+  spothinta:
+    enabled: true
+    url: https://api.spot-hinta.fi/TodayAndDayForward
+
+forecasts:
+  nordpool_predict_fi:
+    enabled: true
+    url: https://raw.githubusercontent.com/vividfog/nordpool-predict-fi/main/deploy/prediction.json
+    # The published prices include VAT; it is removed before storing.
+    vat_rate: 0.255
+    # The first run first seen after this UTC time each day is used as the
+    # once-a-day forecast.
+    daily_run_after_utc: "09:30"
+
+export:
+  output: web/data/spot.json
+  # Whole days shown before today.
+  days_back: 7
+  # Forecast shown at most this many days past the last confirmed price.
+  forecast_days: 2
+  # Earlier forecast runs (one per day) shown with the "earlier forecasts" toggle.
+  earlier_forecasts:
+    enabled: true
+    horizon_hours: 48
+  # Uncertainty band from the archived forecast errors. Left out of the JSON
+  # until there is enough history.
+  band:
+    enabled: true
+    history_days: 30
+    quantiles: [0.1, 0.9]
+    min_samples: 48

@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "spotprice"
+version = "0.1.0"
+description = "Collect Finnish spot electricity prices and forecasts to SQLite and export static JSON"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "requests>=2.28",
+    "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=7"]
+
+[project.scripts]
+spotprice-collect = "spotprice.collect:main"
+spotprice-export = "spotprice.export:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
